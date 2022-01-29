@@ -3,6 +3,7 @@ const Otp = require("../models/otp");
 const bcrypt = require("bcrypt");
 const otpgenrator = require("otp-generator");
 const CryptoJS = require("crypto-js");
+const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res) => {
   const user = await User.findOne({
@@ -105,21 +106,56 @@ exports.login = async (req, res) => {
         result,
       });
     }
-
-    //generating jwt token
-    const accessToken = jwt.sign(
-      { id: user._id, isAdmin: user.isAdmin, number: user.number },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRY }
-    );
-
-    res.status(200).json({
-      success: true,
-      accessToken,
-    });
   } catch (error) {
     res.status(400).json({
       error,
     });
+  }
+};
+
+exports.verifyOtpLogin = async (req, res) => {
+  const otpHolder = await Otp.find({
+    number: req.body.number,
+  });
+  if (otpHolder.length === 0) return res.status(400).json("OTP EXPIRED");
+  const otpfromdb = otpHolder[otpHolder.length - 1];
+  const validotp = await bcrypt.compare(req.body.otp, otpfromdb.otp);
+
+  if (otpfromdb.number === req.body.number && validotp) {
+    try {
+      const FoundUser = await User.findOne({ number: req.body.number });
+
+      //generating jwt token
+      const accessToken = jwt.sign(
+        {
+          id: FoundUser._id,
+          isAdmin: FoundUser.isAdmin,
+          number: FoundUser.number,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRY }
+      );
+
+      const { password, ...info } = FoundUser._doc;
+
+      res.status(200).json({
+        succes: true,
+        message: "USER LOGIN SUCCESSFULL",
+        ...info,
+        accessToken,
+      });
+    } catch (error) {
+      res.status(500).json({
+        error,
+        message: "ERROR IN verifyOtpLogin",
+      });
+    }
+
+    //deleting other otps other than newes one
+    const deleteOtp = await Otp.deleteMany({
+      number: otpfromdb.number,
+    });
+  } else {
+    return res.status(400).json("INVALID OTP");
   }
 };
