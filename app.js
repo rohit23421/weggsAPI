@@ -12,8 +12,12 @@ app.use(express.urlencoded({ extended: true }));
 
 //importing routes here
 const user = require("./routes/User");
+const product = require("./routes/Product");
+const order = require("./routes/Order");
 
 //router middleware
 app.use("/api/v1", user);
+app.use("/api/v1", product);
+app.use("/api/v1", order);
 
 module.exports = app;
