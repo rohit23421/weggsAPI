@@ -51,6 +51,7 @@ exports.verifyOtp = async (req, res) => {
         process.env.SECRET_KEY
       ).toString(),
       number: req.body.number,
+      address: req.body.address,
     });
     try {
       const newUser = await user.save();

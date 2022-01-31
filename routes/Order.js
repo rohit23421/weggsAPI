@@ -12,7 +12,9 @@ const {
   verifyTokenAndAdmin,
 } = require("../middlewares/verifyJwtToken");
 
-router.route("/order").post(verifyToken, createOrder);
+router
+  .route("/order")
+  .post(verifyToken || verifyTokenAndAuthorization, createOrder);
 router
   .route("/order/:id")
   .get(verifyTokenAndAuthorization, getOrder)

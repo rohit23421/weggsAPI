@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+// const storage = require("../config/firebase");
 
 //CREATE PRODUCT
 exports.createProduct = async (req, res) => {

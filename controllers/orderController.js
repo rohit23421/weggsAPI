@@ -2,10 +2,28 @@ const Order = require("../models/order");
 
 //CREATE ORDER
 exports.createOrder = async (req, res) => {
-  const newOrder = new Order(req.body);
+  // const newOrder = new Order(req.body);
+
+  const {
+    shippingInfo,
+    orderItems,
+    paymentInfo,
+    taxAmount,
+    shippingAmount,
+    totalAmount,
+  } = req.body;
 
   try {
-    const savedOrder = await newOrder.save();
+    const savedOrder = await Order.create({
+      shippingInfo,
+      orderItems,
+      paymentInfo,
+      taxAmount,
+      shippingAmount,
+      totalAmount,
+      user: req.user._id,
+    });
+    // console.log(req.user._id);
     res.status(200).json({
       success: true,
       savedOrder,

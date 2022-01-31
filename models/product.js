@@ -14,9 +14,21 @@ const productSchema = new mongoose.Schema(
       trim: true,
       maxlength: 2000,
     },
-    photo: {
+    photos: {
       type: String,
     },
+    // photos: [
+    //   {
+    //     id: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //     secure_url: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //   },
+    // ],
     price: {
       type: Number,
       required: true,
@@ -28,6 +40,10 @@ const productSchema = new mongoose.Schema(
     },
     stock: {
       type: Number,
+    },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true }
