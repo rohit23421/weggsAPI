@@ -6,6 +6,9 @@ const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
+//PAGINATION ROUTE
+// const { paginate } = require("../testpagination");
+
 exports.signup = async (req, res) => {
   const user = await User.findOne({
     number: req.body.number,
@@ -128,7 +131,7 @@ exports.verifyOtpLogin = async (req, res) => {
       })
       .status(200)
       .json({
-        succes: true,
+        success: true,
         message: "USER LOGIN SUCCESSFULL",
         ...info,
         accessToken,
