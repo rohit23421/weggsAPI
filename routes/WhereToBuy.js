@@ -14,7 +14,7 @@ const {
 } = require("../middlewares/verifyJwtToken");
 
 router
-  .route("/whereto")
+  .route("/admin/whereto")
   .post(
     verifyToken,
     verifyTokenAndAuthorization,
@@ -23,7 +23,7 @@ router
   );
 
 router
-  .route("/whereto/:id")
+  .route("/admin/whereto/:id")
   .get(getWhereTo)
   .put(
     verifyToken,
