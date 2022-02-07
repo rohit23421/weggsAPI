@@ -3,10 +3,12 @@ require("dotenv").config();
 const app = express();
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
+const cors = require("cors");
 
 //regular middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 //for cookies middleware
 app.use(cookieParser());
