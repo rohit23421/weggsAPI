@@ -5,6 +5,14 @@ const {
   getAllOrdersPagination,
   getAllProductsPagination,
   getAllWhereTosPagination,
+  getyearlyordercount,
+  getweeklyordercount,
+  getmonthlyordercount,
+  getdailyordercount,
+  getyearlyusercount,
+  getmonthlyusercount,
+  getweeklyusercount,
+  getdailyusercount,
 } = require("../controllers/adminController");
 const {
   verifyToken,
@@ -55,6 +63,75 @@ router
     verifyTokenAndAuthorization,
     verifyTokenAndAdmin,
     getAllWhereTosPagination
+  );
+
+router
+  .route("/admin/yearlyorders")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getyearlyordercount
+  );
+router
+  .route("/admin/weeklyorders")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getweeklyordercount
+  );
+router
+  .route("/admin/monthlyorders")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getmonthlyordercount
+  );
+router
+  .route("/admin/dailyorders")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getdailyordercount
+  );
+
+router
+  .route("/admin/yearlyusers")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getyearlyusercount
+  );
+
+router
+  .route("/admin/monthlyusers")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getmonthlyusercount
+  );
+
+router
+  .route("/admin/weeklyusers")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getweeklyusercount
+  );
+
+router
+  .route("/admin/dailyusers")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getdailyusercount
   );
 
 module.exports = router;
