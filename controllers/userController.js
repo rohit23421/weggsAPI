@@ -6,8 +6,9 @@ const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
-//PAGINATION ROUTE
-// const { paginate } = require("../testpagination");
+//OTP SMS msg91
+const SendOtp = require("sendotp");
+const sendOtp = new SendOtp("373306AZKF6wNK62107f68P1");
 
 exports.signup = async (req, res) => {
   const user = await User.findOne({
@@ -26,6 +27,19 @@ exports.signup = async (req, res) => {
   //store te passed number by user for further processing
   const number = req.body.number;
   console.log(OTP);
+
+  //send OTP in SMS - msg91
+  const codenumber = 91 + number;
+  console.log(typeof codenumber, codenumber, typeof OTP, OTP);
+  sendOtp.send(codenumber, "otptst", OTP, function (error, data) {
+    if (error) {
+      console.log(error);
+    }
+    console.log({
+      sucess: true,
+      data,
+    });
+  });
 
   const otp = new Otp({ number: number, otp: OTP });
   const salt = await bcrypt.genSalt(10);
@@ -60,7 +74,7 @@ exports.verifyOtp = async (req, res) => {
     try {
       const newUser = await user.save();
       res.status(200).json({
-        succes: true,
+        success: true,
         message: "USER SIGNED UP SUCCESSFULLY",
         newUser,
       });
@@ -70,7 +84,7 @@ exports.verifyOtp = async (req, res) => {
       });
     }
 
-    //deleting other otps other than newes one
+    //deleting other otps other than newest one
     const deleteOtp = await Otp.deleteMany({
       number: otpfromdb.number,
     });

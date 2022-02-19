@@ -25,6 +25,7 @@ const product = require("./routes/Product");
 const order = require("./routes/Order");
 const WhereToBuy = require("./routes/WhereToBuy");
 const Admin = require("./routes/Admin");
+const Payment = require("./routes/Payment");
 
 //router middleware
 app.use("/api/v1", user);
@@ -32,5 +33,6 @@ app.use("/api/v1", product);
 app.use("/api/v1", order);
 app.use("/api/v1", WhereToBuy);
 app.use("/api/v1", Admin);
+app.use("/api/v1", Payment);
 
 module.exports = app;

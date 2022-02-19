@@ -51,7 +51,7 @@ exports.getTotalCustomersPagination = async (req, res) => {
 
 //GET TOTAL ORDERS WITH PAGINATION
 exports.getAllOrdersPagination = async (req, res) => {
-  const limit = 3 || req.query.limit;
+  const limit = req.query.limit;
 
   try {
     const totalOrderCount = await Order.countDocuments();
@@ -82,7 +82,13 @@ exports.getAllOrdersPagination = async (req, res) => {
 
 //GET TOTAL PRODUCTS WITH PAGINATION
 exports.getAllProductsPagination = async (req, res) => {
-  const limit = 3 || req.query.limit;
+  // if(!req.query.limit){
+  //   const limit = 3;
+  // }else{
+  //   const limit = req.query.limit;
+  // }
+
+  const limit = req.query.limit;
 
   try {
     const totalProductCount = await Product.countDocuments();
@@ -113,7 +119,7 @@ exports.getAllProductsPagination = async (req, res) => {
 
 //GET TOTAL WHERE-TO'S WITH PAGINATION
 exports.getAllWhereTosPagination = async (req, res) => {
-  const limit = 3 || req.query.limit;
+  const limit = req.query.limit;
 
   try {
     const totalWhereToCount = await WhereToBuy.countDocuments();
