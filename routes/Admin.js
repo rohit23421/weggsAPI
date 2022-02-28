@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const {
+  getOneCustomer,
   getTotalCustomersCount,
   getTotalCustomersPagination,
   getAllOrdersPagination,
@@ -132,6 +133,15 @@ router
     verifyTokenAndAuthorization,
     verifyTokenAndAdmin,
     getdailyusercount
+  );
+
+router
+  .route("/admin/finduser/:id")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getOneCustomer
   );
 
 module.exports = router;

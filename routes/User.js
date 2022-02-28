@@ -4,14 +4,28 @@ const {
   verifyOtp,
   verifyOtpLogin,
   logout,
+  updateUser,
   pagination,
 } = require("../controllers/userController");
+
+const { getAllProductsPagination } = require("../controllers/adminController");
+
+const {
+  verifyToken,
+  verifyTokenAndAuthorization,
+} = require("../middlewares/verifyJwtToken");
 
 router.route("/signup").post(signup);
 router.route("/signup/verifyOtp").post(verifyOtp);
 router.route("/signin/verifyOtp").post(verifyOtpLogin);
 router.route("/logout").get(logout);
 
-// router.route("/user").get(pagination);
+router
+  .route("/userupdate/:id")
+  .put(verifyToken, verifyTokenAndAuthorization, updateUser);
+
+router
+  .route("/totalproducts")
+  .get(verifyToken, verifyTokenAndAuthorization, getAllProductsPagination);
 
 module.exports = router;

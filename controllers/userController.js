@@ -164,3 +164,27 @@ exports.logout = async (req, res) => {
     message: "SUCCESSFULLY LOGGED OUT",
   });
 };
+
+exports.updateUser = async (req, res) => {
+  //exports.updateOrder = async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json({
+      success: true,
+      updatedUser,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "ERROR IN UPDATING USER",
+      error,
+    });
+  }
+};
