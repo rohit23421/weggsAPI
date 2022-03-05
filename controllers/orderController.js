@@ -1,4 +1,5 @@
 const Order = require("../models/order");
+const User = require("../models/user");
 
 //CREATE ORDER
 exports.createOrder = async (req, res) => {
@@ -76,7 +77,7 @@ exports.deleteOrder = async (req, res) => {
   }
 };
 
-//GET ORDERS ONLY FOR PARTICULAR USER
+//GET SINGLE ORDER BY ID
 exports.getOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -86,7 +87,7 @@ exports.getOrder = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: "ERROR FROM GET USER ORDER",
+      message: "ERROR FROM GET SINGLE ORDER",
     });
   }
 };
@@ -102,6 +103,48 @@ exports.getAllOrders = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       message: "ERROR FROM GET ALL ORDER FOR ADMIN",
+      error,
+    });
+  }
+};
+
+//GET ORDERS FOR PARTICULAR USER
+exports.getAllOrdersByUser = async (req, res) => {
+  //get the user from params for matching with Orders users id
+  const user = req.params.id;
+  console.log(user);
+  try {
+    const orders = await Order.find({ user: user });
+    // console.log(orders);
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "ERROR IN GETTING ALL ORDERS BY USER from getAllOrdersByUser",
+      error,
+    });
+  }
+};
+
+//GET ONE ORDER FOR USER(ONLY ORDERED BY HIM/HER)
+exports.getOneOrderByUser = async (req, res) => {
+  //get the user from params for matching with Orders users id
+  const user = req.params.id;
+  const orderid = req.params.orderId;
+  console.log(user);
+  console.log(orderid);
+  try {
+    const orders = await Order.findOne({ user: user, _id: orderid });
+    // console.log(orders);
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "ERROR IN GETTING ALL ORDERS BY USER from getAllOrdersByUser",
       error,
     });
   }

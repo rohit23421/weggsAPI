@@ -5,6 +5,8 @@ const {
   deleteOrder,
   getOrder,
   getAllOrders,
+  getAllOrdersByUser,
+  getOneOrderByUser,
 } = require("../controllers/orderController");
 const {
   verifyToken,
@@ -22,5 +24,9 @@ router
   .delete(verifyTokenAndAdmin, deleteOrder);
 
 router.route("/orders").get(verifyTokenAndAdmin, getAllOrders);
+
+router.route("/orders/:id").get(verifyToken, getAllOrdersByUser);
+
+router.route("/ordersingle/:id/:orderId").get(verifyToken, getOneOrderByUser);
 
 module.exports = router;
