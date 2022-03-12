@@ -78,7 +78,7 @@ exports.deleteOrder = async (req, res) => {
 };
 
 //GET SINGLE ORDER BY ID
-exports.getOrder = async (req, res) => {
+exports.getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     res.status(200).json({
@@ -108,7 +108,7 @@ exports.getAllOrders = async (req, res) => {
   }
 };
 
-//GET ORDERS FOR PARTICULAR USER
+//GET ALL ORDERS FOR PARTICULAR USER
 exports.getAllOrdersByUser = async (req, res) => {
   //get the user from params for matching with Orders users id
   const user = req.params.id;

@@ -104,7 +104,7 @@ exports.getAllProductsPagination = async (req, res) => {
   //   const limit = req.query.limit;
   // }
 
-  const limit = req.query.limit;
+  const limit = 3;
 
   try {
     const totalProductCount = await Product.countDocuments();

@@ -3,10 +3,10 @@ const {
   createOrder,
   updateOrder,
   deleteOrder,
-  getOrder,
   getAllOrders,
   getAllOrdersByUser,
   getOneOrderByUser,
+  getOrderById,
 } = require("../controllers/orderController");
 const {
   verifyToken,
@@ -19,7 +19,7 @@ router
   .post(verifyToken || verifyTokenAndAuthorization, createOrder);
 router
   .route("/order/:id")
-  .get(verifyTokenAndAuthorization, getOrder)
+  .get(verifyTokenAndAuthorization, getOrderById)
   .put(verifyTokenAndAdmin, updateOrder)
   .delete(verifyTokenAndAdmin, deleteOrder);
 

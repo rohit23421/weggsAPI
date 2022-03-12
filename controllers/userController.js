@@ -112,19 +112,28 @@ const authorization = (req, res, next) => {
 exports.verifyOtpLogin = async (req, res) => {
   try {
     const FoundUser = await User.findOne({ number: req.body.number });
-    !FoundUser && res.status(404).json("USER NOT FOUND,NO SUCH USER IN DB");
+    //console.log(FoundUser);
 
+    if (!FoundUser) {
+      return res.status(404).json("USER NOT FOUND,NO SUCH USER IN DB");
+    }
+    // !FoundUser && res.status(404).json("USER NOT FOUND,NO SUCH USER IN DB");
+
+    //console.log(FoundUser.password);
     const bytes = CryptoJS.AES.decrypt(
       FoundUser.password,
-      process.env.JWT_SECRET
+      process.env.SECRET_KEY
     );
+    //console.log(bytes);
     const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
+    //console.log(`pass is ${originalPassword}`);
+    //console.log(req.body.password);
 
-    !originalPassword === req.body.password &&
-      res
+    if (originalPassword != req.body.password) {
+      return res
         .status(404)
         .json("USER NOT FOUND,NO SUCH USER IN DB,OR INCORRECT PASSWORD");
-
+    }
     //generating jwt token
     const accessToken = jwt.sign(
       {
