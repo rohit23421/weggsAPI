@@ -33,7 +33,6 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
       maxlength: 32,
-      trim: true,
     },
     categories: {
       type: Array,

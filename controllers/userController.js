@@ -10,6 +10,9 @@ const cookieParser = require("cookie-parser");
 const SendOtp = require("sendotp");
 const sendOtp = new SendOtp("373306AZKF6wNK62107f68P1");
 
+//OTP SMS msg91 alternative library
+const msg91 = require("msg91")("API_KEY", "SENDER_ID", "ROUTE_NO");
+
 exports.signup = async (req, res) => {
   const user = await User.findOne({
     number: req.body.number,
@@ -28,9 +31,17 @@ exports.signup = async (req, res) => {
   const number = req.body.number;
   console.log(OTP);
 
-  //send OTP in SMS - msg91
+  //concatinating number with country code
   const codenumber = 91 + number;
   console.log(typeof codenumber, codenumber, typeof OTP, OTP);
+
+  //send OTP in SMS - msg91 Alternative way
+  msg91.send(codenumber, "MESSAGE", function (err, response) {
+    console.log(err);
+    console.log(response);
+  });
+
+  //send OTP in SMS - msg91
   sendOtp.send(codenumber, "otptst", OTP, function (error, data) {
     if (error) {
       console.log(error);
