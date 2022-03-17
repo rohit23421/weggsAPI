@@ -20,12 +20,8 @@ router.route("/signup/verifyOtp").post(verifyOtp);
 router.route("/signin/verifyOtp").post(verifyOtpLogin);
 router.route("/logout").get(logout);
 
-router
-  .route("/userupdate/:id")
-  .put(verifyToken, verifyTokenAndAuthorization, updateUser);
+router.route("/userupdate/:id").put(verifyToken, updateUser);
 
-router
-  .route("/totalproducts")
-  .get(verifyToken, verifyTokenAndAuthorization, getAllProductsPagination);
+router.route("/totalproducts").get(verifyToken, getAllProductsPagination);
 
 module.exports = router;

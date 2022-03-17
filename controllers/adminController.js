@@ -38,7 +38,7 @@ exports.getTotalCustomersCount = async (req, res) => {
 
 //GET TOTAL USERS WITH PAGINATION
 exports.getTotalCustomersPagination = async (req, res) => {
-  const limit = req.query.limit;
+  const limit = 12;
 
   try {
     const totalCustCount = await User.countDocuments();
@@ -67,7 +67,7 @@ exports.getTotalCustomersPagination = async (req, res) => {
 
 //GET TOTAL ORDERS WITH PAGINATION
 exports.getAllOrdersPagination = async (req, res) => {
-  const limit = req.query.limit;
+  const limit = 12;
 
   try {
     const totalOrderCount = await Order.countDocuments();
@@ -104,7 +104,7 @@ exports.getAllProductsPagination = async (req, res) => {
   //   const limit = req.query.limit;
   // }
 
-  const limit = 3;
+  const limit = 12;
 
   try {
     const totalProductCount = await Product.countDocuments();
