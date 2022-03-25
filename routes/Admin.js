@@ -14,6 +14,8 @@ const {
   getmonthlyusercount,
   getweeklyusercount,
   getdailyusercount,
+  getrecentfiveorders,
+  getordersingraph,
 } = require("../controllers/adminController");
 const {
   verifyToken,
@@ -142,6 +144,24 @@ router
     verifyTokenAndAuthorization,
     verifyTokenAndAdmin,
     getOneCustomer
+  );
+
+router
+  .route("/admin/recentorders")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getrecentfiveorders
+  );
+
+router
+  .route("/admin/graphorders")
+  .get(
+    verifyToken,
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin,
+    getordersingraph
   );
 
 module.exports = router;

@@ -6,6 +6,9 @@ const {
   getProduct,
   getAllProduct,
 } = require("../controllers/productController");
+
+const { getAllProductsPagination } = require("../controllers/adminController");
+
 const {
   verifyToken,
   verifyTokenAndAuthorization,
@@ -37,5 +40,7 @@ router
   );
 
 router.route("/products").get(getAllProduct);
+
+router.route("/productspaginated").get(getAllProductsPagination);
 
 module.exports = router;

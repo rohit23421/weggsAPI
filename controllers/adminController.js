@@ -575,3 +575,71 @@ exports.getdailyordercount = async (req, res) => {
     });
   }
 };
+
+exports.getrecentfiveorders = async (req, res) => {
+  try {
+    const recentOrders = await Order.find().sort({ _id: -1 }).limit(5);
+    res.status(200).json({
+      success: true,
+      recentOrders,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "ERROR IN GETTING TOTAL ORDERS FROM PAGINATION",
+      error,
+    });
+  }
+};
+
+exports.getordersingraph = async (req, res) => {
+  try {
+    const graphingorders = await Order.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            // day: { $dayOfMonth: "$createdAt" },
+          },
+          count: {
+            $sum: 1,
+          },
+          Amount: {
+            $sum: "$totalAmount",
+          },
+        },
+      },
+      // {
+      //   $group: {
+      //     _id: { year: "$_id.year", month: "$_id.month" },
+      //     dailyusage: { $push: { day: "$_id.day", count: "$count" } },
+      //   },
+      // },
+      // {
+      //   $group: {
+      //     _id: { year: "$_id.year" },
+      //     monthlyusage: {
+      //       $push: { month: "$_id.month", dailyusage: "$dailyusage" },
+      //     },
+      //   },
+      // }
+      {
+        $project: {
+          // _id: 0,
+          totalcount: "$count",
+          sales: "$Amount",
+        },
+      },
+    ]);
+    console.log(graphingorders);
+    res.status(200).json({
+      success: true,
+      graphingorders,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "ERROR from getordersingraph",
+      error,
+    });
+  }
+};
