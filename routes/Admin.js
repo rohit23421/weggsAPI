@@ -16,6 +16,7 @@ const {
   getdailyusercount,
   getrecentfiveorders,
   getordersingraph,
+  getTotalProductCount,
 } = require("../controllers/adminController");
 const {
   verifyToken,
@@ -163,5 +164,7 @@ router
     verifyTokenAndAdmin,
     getordersingraph
   );
+
+router.route("/admin/totalproductcount").get(getTotalProductCount);
 
 module.exports = router;

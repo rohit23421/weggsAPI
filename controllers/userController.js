@@ -6,12 +6,18 @@ const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
-//OTP SMS msg91
-const SendOtp = require("sendotp");
-const sendOtp = new SendOtp("373306AZKF6wNK62107f68P1");
+// const msg91OTP = require("msg91-lib").msg91OTP;
+// const msg91otp = new msg91OTP({
+//   authKey: "374623A85ve8TcVaj6232e695P1",
+//   templateId: "6261691dc4dbdc58d3127408",
+// });
+
+// //OTP SMS msg91
+// const SendOtp = require("sendotp");
+// const sendOtp = new SendOtp("374623A85ve8TcVaj6232e695P1");
 
 //OTP SMS msg91 alternative library
-const msg91 = require("msg91")("API_KEY", "SENDER_ID", "ROUTE_NO");
+// const msg91 = require("msg91")("374623A85ve8TcVaj6232e695P1", "rweggs ", "4");
 
 exports.signup = async (req, res) => {
   const user = await User.findOne({
@@ -20,7 +26,7 @@ exports.signup = async (req, res) => {
   if (user) {
     return res.status(400).json("USER ALREADY REGISTERED");
   }
-  const OTP = otpgenrator.generate(6, {
+  const OTP = otpgenrator.generate(4, {
     digits: true,
     alphabets: false,
     lowerCaseAlphabets: false,
@@ -32,25 +38,82 @@ exports.signup = async (req, res) => {
   console.log(OTP);
 
   //concatinating number with country code
-  const codenumber = 91 + number;
+  var codenumber = 91 + number;
   console.log(typeof codenumber, codenumber, typeof OTP, OTP);
 
-  //send OTP in SMS - msg91 Alternative way
-  msg91.send(codenumber, "MESSAGE", function (err, response) {
-    console.log(err);
-    console.log(response);
-  });
+  // args = {
+  //   // ...
+  //   OTP: OTP,
+  //   // otp_expiry: 5, // this will be in minute
+  //   // ...
+  // };
+
+  // try {
+  //   const response = await msg91otp.send(codenumber, args); // can be passed without country code and as string
+  //   console.log(response);
+  // } catch (error) {
+  //   console.log(error.toJson());
+  // }
+
+  const http = require("https");
+
+  try {
+    const options = {
+      method: "GET",
+      hostname: "api.msg91.com",
+      port: null,
+      path:
+        "/api/v5/otp?template_id=6261691dc4dbdc58d3127408&mobile=" +
+        codenumber +
+        "&authkey=374623A85ve8TcVaj6232e695P1&otp=" +
+        OTP,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const requt = http.request(options, function (res) {
+      const chunks = [];
+
+      res.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+
+      res.on("end", function () {
+        const body = Buffer.concat(chunks);
+        console.log(body.toString());
+      });
+    });
+
+    // req.write('{"Value1":"Param1","Value2":"Param2","Value3":"Param3"}');
+    requt.end();
+  } catch (error) {
+    return res.status(400).send({
+      message: "ERROR IN SENDING MSG FROM MSG91",
+      error,
+    });
+  }
+
+  // //send OTP in SMS - msg91 Alternative way
+  // msg91.send(number, "MESSAGE", function (err, response) {
+  //   console.log(err);
+  //   console.log(response);
+  // });
+
+  // sendOtp.send(codenumber, "rweggs", "4635", function (error, data) {
+  //   console.log(data);
+  // });
 
   //send OTP in SMS - msg91
-  sendOtp.send(codenumber, "otptst", OTP, function (error, data) {
-    if (error) {
-      console.log(error);
-    }
-    console.log({
-      sucess: true,
-      data,
-    });
-  });
+  // sendOtp.send(codenumber, "rweggs", OTP, function (error, data) {
+  //   if (error) {
+  //     console.log(error);
+  //   }
+  //   console.log({
+  //     sucess: true,
+  //     data,
+  //   });
+  // });
 
   const otp = new Otp({ number: number, otp: OTP });
   const salt = await bcrypt.genSalt(10);
@@ -64,6 +127,13 @@ exports.signup = async (req, res) => {
 };
 
 exports.verifyOtp = async (req, res) => {
+  // try {
+  //   const response = await msg91otp.verify(codenumber); // can be passed without country code and as number(int)
+  //   console.log(response);
+  // } catch (error) {
+  //   console.log(error);
+  // }
+
   const otpHolder = await Otp.find({
     number: req.body.number,
   });
@@ -103,6 +173,31 @@ exports.verifyOtp = async (req, res) => {
     return res.status(400).json("INVALID OTP");
   }
 };
+
+// exports.verifiedOtpUserSignup = async (req, res) => {
+//   try {
+//     const user = new User({
+//       name: req.body.name,
+//       email: req.body.email,
+//       password: CryptoJS.AES.encrypt(
+//         req.body.password,
+//         process.env.SECRET_KEY
+//       ).toString(),
+//       number: req.body.number,
+//       address: req.body.address,
+//     });
+//     const newUser = await user.save();
+//     res.status(200).json({
+//       success: true,
+//       message: "USER SIGNED UP SUCCESSFULLY",
+//       newUser,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       error,
+//     });
+//   }
+// };
 
 const authorization = (req, res, next) => {
   const accessToken = req.cookies.accessToken;

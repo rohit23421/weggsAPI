@@ -21,6 +21,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.1.8",
     "msg91": "^0.0.6",
+    "msg91-lib": "^2.0.2",
     "nodemon": "^2.0.15",
     "otp-generator": "^4.0.0",
     "razorpay": "^2.8.0",

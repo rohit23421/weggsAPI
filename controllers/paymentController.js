@@ -15,7 +15,7 @@ exports.captureRazorpayPayment = BigPromise(async (req, res, next) => {
   });
 
   var options = {
-    amount: req.body.amount,
+    amount: req.body.amount * 100,
     currency: "INR",
     receipt: "receipt#1",
   };

@@ -643,3 +643,18 @@ exports.getordersingraph = async (req, res) => {
     });
   }
 };
+
+exports.getTotalProductCount = async (req, res) => {
+  try {
+    const totalproductcount = await Product.countDocuments();
+    res.status(200).json({
+      success: true,
+      totalproductcount,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "ERROR IN GETTING getTotalProductCount",
+      error,
+    });
+  }
+};
